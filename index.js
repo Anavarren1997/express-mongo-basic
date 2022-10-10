@@ -1,17 +1,29 @@
-//how to create an express instance?
 const express       = require('express');
-const bodyParser    = require('body-parser');
+const cors          = require('cors');
+const db            = require('./app/models/index.js');
 const app           = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(function (req, res, next) {    
-   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-   res.setHeader('Access-Control-Allow-Credentials', false);
-   next();
-});
+var corsOptions = {
+    origin: "http://localhost:8081"
+}
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//Stablish connection to MongoDB
+db.mongoose
+    .connect(db.url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        console.log("Conectado a MongoDB");
+    })
+    .catch(err => {
+        console.log("Cannot Connect to MongoDB! ", err);
+        process.exit();
+    })
 
 //Here you want to import you route files.
 
@@ -23,12 +35,11 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/token', (req, res) => {
-    
-});
+require('./app/routes/tutorial.routes.js')(app);
 
-app.listen(process.env.PORT || 3000 , () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT , () => {
     //Theres no env.PORT configured already
-    console.log('Hi, API listeing on Port 3000');
+    console.log(`Hi, API listeing on Port ${PORT}`);
 });
 
