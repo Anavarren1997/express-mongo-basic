@@ -8,10 +8,13 @@ const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.tutorials = require("./tutorial.model")(mongoose);
+db.users = require("./user.model.js")(mongoose);
+db.roles = require("./role.model.js")(mongoose);
+
+db.ROLES = ["user", "admin", "moderator"];
 /*
  * Aquí se insertan las demás colecciones?xd
  */
-
 
 /* 
 create a new Tutorial: object.save()
@@ -24,4 +27,3 @@ find all Tutorials by title: find({ title: { $regex: new RegExp(title), $options
 */
 
 module.exports = db;
-
