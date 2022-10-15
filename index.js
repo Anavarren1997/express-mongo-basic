@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
-const db = require("./app/models/index.js");
+const db = require("./app/config/db.config.js");
 const app = express();
 
 var corsOptions = {
@@ -26,6 +27,9 @@ db.mongoose
   });
 
 //Here you want to import you route files.
+require("./app/routes/tutorial.routes.js")(app);
+require("./app/routes/auth.routes")(app);
+require("./app/routes/user.routes")(app);
 
 //Every express app http method has a PATH and a handler function
 //with the request and response as parameters.
@@ -34,10 +38,6 @@ app.get("/", (req, res) => {
     message: "Welcome to our API rest built with Node.js & Express.",
   });
 });
-
-require("./app/routes/tutorial.routes.js")(app);
-require("./app/routes/auth.routes")(app);
-require("./app/routes/user.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

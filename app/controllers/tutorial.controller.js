@@ -1,4 +1,4 @@
-const db = require('../models/index.js');
+const db = require('../config/db.config.js');
 const Tutorial = db.tutorials;
 
 exports.create = (req, res) => {
